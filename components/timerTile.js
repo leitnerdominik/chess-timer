@@ -7,10 +7,13 @@ import {
   Dimensions,
 } from "react-native";
 
+import DefaultText from '../components/DefaultText';
+import Colors from "../constants/Colors";
+
 const deviceWidth = Dimensions.get("window").width;
 
 const timerTile = (props) => {
-  let containerClasses = [styles.tileContainer, props.style];
+  let containerClasses = [props.style, styles.tileContainer];
 
   if (props.lost) {
     containerClasses.push(styles.lost);
@@ -27,7 +30,7 @@ const timerTile = (props) => {
 
   return (
     <TouchableOpacity activeOpacity={0.8} style={containerClasses} onPress={props.clicked}>
-      <Text style={{ fontSize: textSize }}>{props.children}</Text>
+      <DefaultText style={{ fontSize: textSize }}>{props.children}</DefaultText>
     </TouchableOpacity>
   );
 };
@@ -37,20 +40,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
-  },
-  whiteTile: {
-    backgroundColor: "white",
-  },
-  blackTile: {
-    backgroundColor: "black",
+    // elevation: 3,
   },
   active: {
-    // backgroundColor: "#f0932b",
-    backgroundColor: "#0097e6",
+    backgroundColor: Colors.primaryColor,
   },
   lost: {
-    backgroundColor: "#e84118",
+    backgroundColor: Colors.lostColor,
+
   },
 });
 

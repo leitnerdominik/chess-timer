@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Audio } from "expo-av";
 
-import TimerTile from "../components/timerTile";
+import TimerTile from "../components/TimerTile";
 import Menu from "../components/Menu";
+
 import { timeToString } from "../util/util";
+import Colors from "../constants/Colors";
 
 const Timer = (props) => {
   const [blackTimeLeft, setBlackTimeLeft] = useState();
@@ -21,12 +23,14 @@ const Timer = (props) => {
       if (turn === "white") {
         if (whiteTimeLeft === 0) {
           playEndSound();
+          setStarted(false);
           return clearInterval(timerInterval);
         }
         timerInterval = countdown("white");
       } else {
         if (blackTimeLeft === 0) {
           playEndSound();
+          setStarted(false);
           return clearInterval(timerInterval);
         }
         timerInterval = countdown("black");
@@ -98,6 +102,11 @@ const Timer = (props) => {
   const startTimeHandler = (currentTurn) => {
     if (currentTurn === "white" && turn === "white") return;
     if (currentTurn === "black" && turn === "black") return;
+    if (!started) {
+      if (whiteTimeLeft <= 0 || blackTimeLeft <= 0) {
+        return;
+      }
+    }
     setStarted(true);
     setTurn(currentTurn);
     playTurnSound();
@@ -111,7 +120,7 @@ const Timer = (props) => {
 
   const pauseTimeHandler = () => {
     setStarted(false);
-  }
+  };
 
   return (
     <View style={styles.root}>
@@ -127,7 +136,12 @@ const Timer = (props) => {
             {timeToString(whiteTimeLeft)}
           </TimerTile>
         </View>
-        <Menu reset={resetTimeHandler} started={started} navigation={props.navigation} pause={pauseTimeHandler}/>
+        <Menu
+          reset={resetTimeHandler}
+          started={started}
+          navigation={props.navigation}
+          pause={pauseTimeHandler}
+        />
         <View style={styles.tileContainer}>
           <TimerTile
             variant="black"
@@ -145,22 +159,21 @@ const Timer = (props) => {
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: "#2f3640",
+    backgroundColor: Colors.accentColor,
     flex: 1,
-    justifyContent: "center",
   },
   timerContainer: {
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
     margin: 20,
   },
   tileContainer: {
-    height: "40%",
+    height: "45%",
     width: "100%",
   },
   rotateTile: {
-    transform: [{ rotate: '180deg'}]
-  }
+    transform: [{ rotate: "180deg" }],
+  },
 });
 
 export default Timer;

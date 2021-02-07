@@ -5,7 +5,12 @@ import { Ionicons } from "@expo/vector-icons";
 const Menu = (props) => {
   return (
     <View style={styles.menuContainer}>
-      <TouchableOpacity onPress={() => props.navigation.navigate("Settings")}>
+      <TouchableOpacity
+        onPress={() => {
+          props.navigation.navigate("Settings");
+          props.pause();
+        }}
+      >
         <Ionicons color="white" name="ios-settings" size={48} />
       </TouchableOpacity>
       {props.started ? (
@@ -23,7 +28,8 @@ const Menu = (props) => {
 const styles = StyleSheet.create({
   menuContainer: {
     width: "100%",
-    padding: 16,
+    paddingVertical: 5,
+    paddingHorizontal: 16,
     flexDirection: "row",
     justifyContent: "space-between",
   },
